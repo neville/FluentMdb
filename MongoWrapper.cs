@@ -1,5 +1,6 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Collections.Generic;
 
 namespace csharp_mongo_wrapper
 {
@@ -29,6 +30,11 @@ namespace csharp_mongo_wrapper
         public void Insert(BsonDocument document)
         {
             collection.InsertOne(document);
+        }
+
+        public void InsertMany(IEnumerable<BsonDocument> documents)
+        {
+            collection.InsertMany(documents);
         }
     }
 }
