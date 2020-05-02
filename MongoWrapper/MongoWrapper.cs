@@ -27,6 +27,16 @@ namespace csharp_mongo_wrapper
             collection = database.GetCollection<BsonDocument>("collectionName");
         }
 
+        /// <summary>
+        /// Gets all documents matching the query received in the filter parameter.
+        /// </summary>
+        /// <returns>
+        /// Returns a collection of all matching documents that can be iterated using a loop.
+        /// </returns>
+        public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter) {
+            return collection.Find(filter).ToCursor().ToEnumerable();
+        }
+
         public void Insert(BsonDocument document)
         {
             collection.InsertOne(document);
@@ -37,11 +47,11 @@ namespace csharp_mongo_wrapper
             collection.InsertMany(documents);
         }
 
-        public void Count()
+        public long Count()
         {
             // The empty BsonDocument parameter to the method is a filter. 
             // In this case, it is an empty filter indicating to count all the documents.
-            collection.CountDocuments(new BsonDocument());
+            return collection.CountDocuments(new BsonDocument());
         }
     }
 }
