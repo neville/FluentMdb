@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
-
+ 
 namespace csharp_mongo_wrapper
 {
     class MongoWrapper
@@ -12,18 +12,26 @@ namespace csharp_mongo_wrapper
         IMongoDatabase database;
         IMongoCollection<BsonDocument> collection;
 
+        /// <summary>
+        /// Connects to the server using the connection string received.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// To get a database, specify the name of the database to the GetDatabase method on client. 
+        /// It’s ok if the database doesn’t yet exist. It will be created upon first use.
+        /// </para>
+        /// <para>
+        /// It’s ok if the collection doesn’t yet exist. It will be created upon first use.
+        /// The generic parameter TDocument represents the schema that exists in your collection. 
+        /// Used a BsonDocument to indicate that we have no pre-defined schema. 
+        /// It is possible to use your plain-old-C#-objects (POCOs) as well
+        /// </para>
+        /// </remarks>
         public void Connect(string connectionString)
         {
             client = new MongoClient(connectionString);
 
-            // To get a database, specify the name of the database to the GetDatabase method on client. 
-            // It’s ok if the database doesn’t yet exist. It will be created upon first use.
             database = client.GetDatabase("dbname");
-
-            // It’s ok if the collection doesn’t yet exist. It will be created upon first use.
-            // The generic parameter TDocument represents the schema that exists in your collection. 
-            // Used a BsonDocument to indicate that we have no pre-defined schema. 
-            // It is possible to use your plain-old-C#-objects (POCOs) as well
             collection = database.GetCollection<BsonDocument>("collectionName");
         }
 
