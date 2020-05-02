@@ -1,16 +1,29 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
- 
+
 namespace csharp_mongo_wrapper
 {
     class MongoWrapper
     {
-        // Typically you only create one MongoClient instance for a given cluster and use it across your application. 
-        // Creating multiple MongoClients will, however, still share the same pool of connections if and only if the connection strings are identical.
-        MongoClient client;
-        IMongoDatabase database;
-        IMongoCollection<BsonDocument> collection;
+        /// <summary>
+        /// Gets reference to a client connection
+        /// </summary>
+        /// <remarks>
+        /// <para>Typically you only create one MongoClient instance for a given cluster and use it across your application.</para>
+        /// <para>Creating multiple MongoClients will, however, still share the same pool of connections if and only if the connection strings are identical.</para>
+        /// </remarks>
+        public MongoClient client { get; private set; }
+
+        /// <summary>
+        /// Gets reference to a database 
+        /// </summary>        
+        public IMongoDatabase database { get; private set; }
+
+        /// <summary>
+        /// Gets reference to a collection 
+        /// </summary>      
+        public IMongoCollection<BsonDocument> collection { get; private set; }
 
         /// <summary>
         /// Connects to the server using the connection string received.
