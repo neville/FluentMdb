@@ -180,6 +180,48 @@ namespace csharp_mongo_wrapper
         }
 
         /// <summary>
+        /// Updates an existing document that matches the filter with the received fields and their values
+        /// </summary>
+        /// <returns>
+        /// .
+        /// </returns>
+        public void Update(FilterDefinition<BsonDocument> filter, UpdateDefinition<BsonDocument> fields)
+        {
+            try
+            {
+                UpdateResult result = collection.UpdateOne(filter, fields);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Updates multiple documents that matche the filter with the received fields and their values
+        /// </summary>
+        /// <returns>
+        /// Returns the number of documents modified.
+        /// </returns>
+        public long UpdateMany(FilterDefinition<BsonDocument> filter, UpdateDefinition<BsonDocument> fields)
+        {
+            try
+            {
+                UpdateResult result = collection.UpdateMany(filter, fields);
+                if (result.IsModifiedCountAvailable)
+                {
+                    return result.ModifiedCount;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+
+            return 0;
+        }
+
+        /// <summary>
         /// Gets count of all documents in a collection
         /// </summary>
         /// <returns>
