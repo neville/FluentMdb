@@ -36,5 +36,12 @@ namespace csharp_mongo_wrapper
         {
             collection.InsertMany(documents);
         }
+
+        public void Count()
+        {
+            // The empty BsonDocument parameter to the method is a filter. 
+            // In this case, it is an empty filter indicating to count all the documents.
+            collection.CountDocuments(new BsonDocument());
+        }
     }
 }
