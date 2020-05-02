@@ -25,5 +25,10 @@ namespace csharp_mongo_wrapper
             // It is possible to use your plain-old-C#-objects (POCOs) as well
             collection = database.GetCollection<BsonDocument>("collectionName");
         }
+
+        public void Insert(BsonDocument document)
+        {
+            collection.InsertOne(document);
+        }
     }
 }
