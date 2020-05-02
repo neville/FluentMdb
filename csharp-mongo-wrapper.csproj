@@ -6,4 +6,8 @@
     <RootNamespace>csharp_mongo_wrapper</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="mongocsharpdriver" Version="2.10.3" />
+  </ItemGroup>
+
 </Project>
