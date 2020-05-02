@@ -28,13 +28,35 @@ namespace csharp_mongo_wrapper
         }
 
         /// <summary>
-        /// Gets all documents matching the query received in the filter parameter.
+        /// Gets all documents matching the query received.
         /// </summary>
         /// <returns>
         /// Returns a collection of all matching documents that can be iterated using a loop.
         /// </returns>
-        public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter) {
+        public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter)
+        {
             return collection.Find(filter).ToCursor().ToEnumerable();
+        }
+
+        public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter, ProjectionDefinition<BsonDocument> fieldsToIncludeAndExclude = null)
+        {
+            return collection.Find(filter).Project(fieldsToIncludeAndExclude).ToCursor().ToEnumerable();
+        }
+
+        /// <summary>
+        /// Gets all documents matching the query and the sort order received.
+        /// </summary>
+        /// <returns>
+        /// Returns a collection of all matching documents that can be iterated using a loop.
+        /// </returns>
+        public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter, SortDefinition<BsonDocument> sortBy)
+        {
+            return collection.Find(filter).Sort(sortBy).ToCursor().ToEnumerable();
+        }
+
+        public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter, SortDefinition<BsonDocument> sortBy, ProjectionDefinition<BsonDocument> fieldsToIncludeAndExclude = null)
+        {
+            return collection.Find(filter).Project(fieldsToIncludeAndExclude).Sort(sortBy).ToCursor().ToEnumerable();
         }
 
         public void Insert(BsonDocument document)
