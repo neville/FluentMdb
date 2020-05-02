@@ -1,11 +1,13 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
-
+ 
 namespace csharp_mongo_wrapper
 {
     class MongoWrapper
     {
+        // MongoDB driver reference documentation - https://mongodb.github.io/mongo-csharp-driver/
+
         /// <summary>
         /// Gets reference to a client connection
         /// </summary>
