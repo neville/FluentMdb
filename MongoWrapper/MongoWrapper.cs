@@ -42,10 +42,17 @@ namespace csharp_mongo_wrapper
         /// </remarks>
         public void Connect(string connectionString)
         {
-            client = new MongoClient(connectionString);
+            try
+            {
+                client = new MongoClient(connectionString);
 
-            database = client.GetDatabase("dbname");
-            collection = database.GetCollection<BsonDocument>("collectionName");
+                database = client.GetDatabase("dbname");
+                collection = database.GetCollection<BsonDocument>("collectionName");
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -56,7 +63,18 @@ namespace csharp_mongo_wrapper
         /// </returns>
         public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter)
         {
-            return collection.Find(filter).ToCursor().ToEnumerable();
+            IEnumerable<BsonDocument> documents;
+
+            try
+            {
+                documents = collection.Find(filter).ToCursor().ToEnumerable();
+            }
+            catch
+            {
+                throw;
+            }
+
+            return documents;
         }
 
         /// <summary>
@@ -67,7 +85,18 @@ namespace csharp_mongo_wrapper
         /// </returns>
         public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter, ProjectionDefinition<BsonDocument> fieldsToIncludeAndExclude = null)
         {
-            return collection.Find(filter).Project(fieldsToIncludeAndExclude).ToCursor().ToEnumerable();
+            IEnumerable<BsonDocument> documents;
+
+            try
+            {
+                documents = collection.Find(filter).Project(fieldsToIncludeAndExclude).ToCursor().ToEnumerable();
+            }
+            catch
+            {
+                throw;
+            }
+
+            return documents;
         }
 
         /// <summary>
@@ -78,7 +107,18 @@ namespace csharp_mongo_wrapper
         /// </returns>
         public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter, SortDefinition<BsonDocument> sortBy)
         {
-            return collection.Find(filter).Sort(sortBy).ToCursor().ToEnumerable();
+            IEnumerable<BsonDocument> documents;
+
+            try
+            {
+                documents = collection.Find(filter).Sort(sortBy).ToCursor().ToEnumerable();
+            }
+            catch
+            {
+                throw;
+            }
+
+            return documents;
         }
 
         /// <summary>
@@ -89,7 +129,18 @@ namespace csharp_mongo_wrapper
         /// </returns>
         public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter, SortDefinition<BsonDocument> sortBy, ProjectionDefinition<BsonDocument> fieldsToIncludeAndExclude = null)
         {
-            return collection.Find(filter).Project(fieldsToIncludeAndExclude).Sort(sortBy).ToCursor().ToEnumerable();
+            IEnumerable<BsonDocument> documents;
+
+            try
+            {
+                documents = collection.Find(filter).Project(fieldsToIncludeAndExclude).Sort(sortBy).ToCursor().ToEnumerable();
+            }
+            catch
+            {
+                throw;
+            }
+
+            return documents;
         }
 
         /// <summary>
@@ -100,7 +151,14 @@ namespace csharp_mongo_wrapper
         /// </returns>
         public void Insert(BsonDocument document)
         {
-            collection.InsertOne(document);
+            try
+            {
+                collection.InsertOne(document);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -111,7 +169,14 @@ namespace csharp_mongo_wrapper
         /// </returns>
         public void InsertMany(IEnumerable<BsonDocument> documents)
         {
-            collection.InsertMany(documents);
+            try
+            {
+                collection.InsertMany(documents);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -122,9 +187,20 @@ namespace csharp_mongo_wrapper
         /// </returns>
         public long Count()
         {
-            // The empty BsonDocument parameter to the method is a filter. 
-            // In this case, it is an empty filter indicating to count all the documents.
-            return collection.CountDocuments(new BsonDocument());
+            long count = 0;
+
+            try
+            {
+                // The empty BsonDocument parameter to the method is a filter. 
+                // In this case, it is an empty filter indicating to count all the documents.
+                count = collection.CountDocuments(new BsonDocument());
+            }
+            catch
+            {
+                throw;
+            }
+
+            return count;
         }
     }
 }
