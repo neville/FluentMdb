@@ -59,6 +59,12 @@ namespace csharp_mongo_wrapper
             return collection.Find(filter).ToCursor().ToEnumerable();
         }
 
+        /// <summary>
+        /// Gets all documents matching the query received with the projected fields
+        /// </summary>
+        /// <returns>
+        /// Returns a collection of all matching documents that can be iterated using a loop.
+        /// </returns>
         public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter, ProjectionDefinition<BsonDocument> fieldsToIncludeAndExclude = null)
         {
             return collection.Find(filter).Project(fieldsToIncludeAndExclude).ToCursor().ToEnumerable();
@@ -75,21 +81,45 @@ namespace csharp_mongo_wrapper
             return collection.Find(filter).Sort(sortBy).ToCursor().ToEnumerable();
         }
 
+        /// <summary>
+        /// Gets all documents matching the query and the sort order received with the projected fields
+        /// </summary>
+        /// <returns>
+        /// Returns a collection of all matching documents that can be iterated using a loop.
+        /// </returns>
         public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter, SortDefinition<BsonDocument> sortBy, ProjectionDefinition<BsonDocument> fieldsToIncludeAndExclude = null)
         {
             return collection.Find(filter).Project(fieldsToIncludeAndExclude).Sort(sortBy).ToCursor().ToEnumerable();
         }
 
+        /// <summary>
+        /// Inserts a document
+        /// </summary>
+        /// <returns>
+        /// Returns void.
+        /// </returns>
         public void Insert(BsonDocument document)
         {
             collection.InsertOne(document);
         }
 
+        /// <summary>
+        /// Inserts many documents
+        /// </summary>
+        /// <returns>
+        /// Returns void.
+        /// </returns>
         public void InsertMany(IEnumerable<BsonDocument> documents)
         {
             collection.InsertMany(documents);
         }
 
+        /// <summary>
+        /// Gets count of all documents in a collection
+        /// </summary>
+        /// <returns>
+        /// Returns void.
+        /// </returns>
         public long Count()
         {
             // The empty BsonDocument parameter to the method is a filter. 
