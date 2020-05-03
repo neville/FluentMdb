@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
- 
+
 namespace csharp_mongo_wrapper
 {
     class MongoWrapper
@@ -23,11 +23,6 @@ namespace csharp_mongo_wrapper
         public IMongoDatabase database { get; private set; }
 
         /// <summary>
-        /// Gets reference to a collection 
-        /// </summary>      
-        public IMongoCollection<BsonDocument> collection { get; private set; }
-
-        /// <summary>
         /// Connects to the server using the connection string received.
         /// </summary>
         /// <remarks>
@@ -47,9 +42,7 @@ namespace csharp_mongo_wrapper
             try
             {
                 client = new MongoClient(connectionString);
-
                 database = client.GetDatabase("dbname");
-                collection = database.GetCollection<BsonDocument>("collectionName");
             }
             catch
             {
@@ -63,13 +56,13 @@ namespace csharp_mongo_wrapper
         /// <returns>
         /// Returns a collection of all matching documents that can be iterated using a loop.
         /// </returns>
-        public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter)
+        public IEnumerable<BsonDocument> FindDocuments(string collection, FilterDefinition<BsonDocument> filter)
         {
             IEnumerable<BsonDocument> documents;
 
             try
             {
-                documents = collection.Find(filter).ToCursor().ToEnumerable();
+                documents =  database.GetCollection<BsonDocument>(collection).Find(filter).ToCursor().ToEnumerable();
             }
             catch
             {
@@ -85,13 +78,13 @@ namespace csharp_mongo_wrapper
         /// <returns>
         /// Returns a collection of all matching documents that can be iterated using a loop.
         /// </returns>
-        public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter, ProjectionDefinition<BsonDocument> fieldsToIncludeAndExclude = null)
+        public IEnumerable<BsonDocument> FindDocuments(string collection, FilterDefinition<BsonDocument> filter, ProjectionDefinition<BsonDocument> fieldsToIncludeAndExclude = null)
         {
             IEnumerable<BsonDocument> documents;
 
             try
             {
-                documents = collection.Find(filter).Project(fieldsToIncludeAndExclude).ToCursor().ToEnumerable();
+                documents = database.GetCollection<BsonDocument>(collection).Find(filter).Project(fieldsToIncludeAndExclude).ToCursor().ToEnumerable();
             }
             catch
             {
@@ -107,13 +100,13 @@ namespace csharp_mongo_wrapper
         /// <returns>
         /// Returns a collection of all matching documents that can be iterated using a loop.
         /// </returns>
-        public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter, SortDefinition<BsonDocument> sortBy)
+        public IEnumerable<BsonDocument> FindDocuments(string collection, FilterDefinition<BsonDocument> filter, SortDefinition<BsonDocument> sortBy)
         {
             IEnumerable<BsonDocument> documents;
 
             try
             {
-                documents = collection.Find(filter).Sort(sortBy).ToCursor().ToEnumerable();
+                documents = database.GetCollection<BsonDocument>(collection).Find(filter).Sort(sortBy).ToCursor().ToEnumerable();
             }
             catch
             {
@@ -129,13 +122,13 @@ namespace csharp_mongo_wrapper
         /// <returns>
         /// Returns a collection of all matching documents that can be iterated using a loop.
         /// </returns>
-        public IEnumerable<BsonDocument> FindDocuments(FilterDefinition<BsonDocument> filter, SortDefinition<BsonDocument> sortBy, ProjectionDefinition<BsonDocument> fieldsToIncludeAndExclude = null)
+        public IEnumerable<BsonDocument> FindDocuments(string collection, FilterDefinition<BsonDocument> filter, SortDefinition<BsonDocument> sortBy, ProjectionDefinition<BsonDocument> fieldsToIncludeAndExclude = null)
         {
             IEnumerable<BsonDocument> documents;
 
             try
             {
-                documents = collection.Find(filter).Project(fieldsToIncludeAndExclude).Sort(sortBy).ToCursor().ToEnumerable();
+                documents = database.GetCollection<BsonDocument>(collection).Find(filter).Project(fieldsToIncludeAndExclude).Sort(sortBy).ToCursor().ToEnumerable();
             }
             catch
             {
@@ -151,11 +144,11 @@ namespace csharp_mongo_wrapper
         /// <returns>
         /// Returns void.
         /// </returns>
-        public void Insert(BsonDocument document)
+        public void Insert(string collection, BsonDocument document)
         {
             try
             {
-                collection.InsertOne(document);
+                database.GetCollection<BsonDocument>(collection).InsertOne(document);
             }
             catch
             {
@@ -169,11 +162,11 @@ namespace csharp_mongo_wrapper
         /// <returns>
         /// Returns void.
         /// </returns>
-        public void InsertMany(IEnumerable<BsonDocument> documents)
+        public void InsertMany(string collection, IEnumerable<BsonDocument> documents)
         {
             try
             {
-                collection.InsertMany(documents);
+                database.GetCollection<BsonDocument>(collection).InsertMany(documents);
             }
             catch
             {
@@ -187,29 +180,29 @@ namespace csharp_mongo_wrapper
         /// <returns>
         /// .
         /// </returns>
-        public void Update(FilterDefinition<BsonDocument> filter, UpdateDefinition<BsonDocument> fields)
+        public void Update(string collection, FilterDefinition<BsonDocument> filter, UpdateDefinition<BsonDocument> fields)
         {
             try
             {
-                UpdateResult result = collection.UpdateOne(filter, fields);
+                UpdateResult result = database.GetCollection<BsonDocument>(collection).UpdateOne(filter, fields);
             }
             catch
             {
                 throw;
             }
         }
-
+ 
         /// <summary>
         /// Updates multiple documents that matche the filter with the received fields and their values
         /// </summary>
         /// <returns>
         /// Returns the number of documents modified.
         /// </returns>
-        public long UpdateMany(FilterDefinition<BsonDocument> filter, UpdateDefinition<BsonDocument> fields)
+        public long UpdateMany(string collection, FilterDefinition<BsonDocument> filter, UpdateDefinition<BsonDocument> fields)
         {
             try
             {
-                UpdateResult result = collection.UpdateMany(filter, fields);
+                UpdateResult result = database.GetCollection<BsonDocument>(collection).UpdateMany(filter, fields);
                 if (result.IsModifiedCountAvailable)
                 {
                     return result.ModifiedCount;
@@ -222,14 +215,14 @@ namespace csharp_mongo_wrapper
 
             return 0;
         }
-
+ 
         /// <summary>
         /// Gets count of all documents in a collection
         /// </summary>
         /// <returns>
         /// Returns void.
         /// </returns>
-        public long Count()
+        public long Count(string collection)
         {
             long count = 0;
 
@@ -237,7 +230,7 @@ namespace csharp_mongo_wrapper
             {
                 // The empty BsonDocument parameter to the method is a filter. 
                 // In this case, it is an empty filter indicating to count all the documents.
-                count = collection.CountDocuments(new BsonDocument());
+                count = database.GetCollection<BsonDocument>(collection).CountDocuments(new BsonDocument());
             }
             catch
             {
