@@ -20,7 +20,7 @@ namespace csharp_mongo_wrapper
         /// <summary>
         /// Gets reference to a database 
         /// </summary>        
-        public IMongoDatabase database { get; private set; }
+        public IMongoDatabase db { get; private set; }
 
         /// <summary>
         /// Connects to the server using the connection string received.
@@ -37,12 +37,12 @@ namespace csharp_mongo_wrapper
         /// It is possible to use your plain-old-C#-objects (POCOs) as well
         /// </para>
         /// </remarks>
-        public void Connect(string connectionString)
+        public void Connect(string connectionString, string database)
         {
             try
             {
                 client = new MongoClient(connectionString);
-                database = client.GetDatabase("dbname");
+                db = client.GetDatabase(database);
             }
             catch
             {
@@ -62,7 +62,7 @@ namespace csharp_mongo_wrapper
 
             try
             {
-                documents =  database.GetCollection<BsonDocument>(collection).Find(filter).ToCursor().ToEnumerable();
+                documents =  db.GetCollection<BsonDocument>(collection).Find(filter).ToCursor().ToEnumerable();
             }
             catch
             {
@@ -84,7 +84,7 @@ namespace csharp_mongo_wrapper
 
             try
             {
-                documents = database.GetCollection<BsonDocument>(collection).Find(filter).Project(fieldsToIncludeAndExclude).ToCursor().ToEnumerable();
+                documents = db.GetCollection<BsonDocument>(collection).Find(filter).Project(fieldsToIncludeAndExclude).ToCursor().ToEnumerable();
             }
             catch
             {
@@ -106,7 +106,7 @@ namespace csharp_mongo_wrapper
 
             try
             {
-                documents = database.GetCollection<BsonDocument>(collection).Find(filter).Sort(sortBy).ToCursor().ToEnumerable();
+                documents = db.GetCollection<BsonDocument>(collection).Find(filter).Sort(sortBy).ToCursor().ToEnumerable();
             }
             catch
             {
@@ -128,7 +128,7 @@ namespace csharp_mongo_wrapper
 
             try
             {
-                documents = database.GetCollection<BsonDocument>(collection).Find(filter).Project(fieldsToIncludeAndExclude).Sort(sortBy).ToCursor().ToEnumerable();
+                documents = db.GetCollection<BsonDocument>(collection).Find(filter).Project(fieldsToIncludeAndExclude).Sort(sortBy).ToCursor().ToEnumerable();
             }
             catch
             {
@@ -148,7 +148,7 @@ namespace csharp_mongo_wrapper
         {
             try
             {
-                database.GetCollection<BsonDocument>(collection).InsertOne(document);
+                db.GetCollection<BsonDocument>(collection).InsertOne(document);
             }
             catch
             {
@@ -166,7 +166,7 @@ namespace csharp_mongo_wrapper
         {
             try
             {
-                database.GetCollection<BsonDocument>(collection).InsertMany(documents);
+                db.GetCollection<BsonDocument>(collection).InsertMany(documents);
             }
             catch
             {
@@ -184,7 +184,7 @@ namespace csharp_mongo_wrapper
         {
             try
             {
-                UpdateResult result = database.GetCollection<BsonDocument>(collection).UpdateOne(filter, fields);
+                UpdateResult result = db.GetCollection<BsonDocument>(collection).UpdateOne(filter, fields);
             }
             catch
             {
@@ -202,7 +202,7 @@ namespace csharp_mongo_wrapper
         {
             try
             {
-                UpdateResult result = database.GetCollection<BsonDocument>(collection).UpdateMany(filter, fields);
+                UpdateResult result = db.GetCollection<BsonDocument>(collection).UpdateMany(filter, fields);
                 if (result.IsModifiedCountAvailable)
                 {
                     return result.ModifiedCount;
@@ -230,7 +230,7 @@ namespace csharp_mongo_wrapper
             {
                 // The empty BsonDocument parameter to the method is a filter. 
                 // In this case, it is an empty filter indicating to count all the documents.
-                count = database.GetCollection<BsonDocument>(collection).CountDocuments(new BsonDocument());
+                count = db.GetCollection<BsonDocument>(collection).CountDocuments(new BsonDocument());
             }
             catch
             {
