@@ -56,13 +56,25 @@ namespace csharp_mongo_wrapper
         /// <returns>
         /// Returns a collection of all matching documents that can be iterated using a loop.
         /// </returns>
-        public IEnumerable<BsonDocument> FindDocuments(string collection, FilterDefinition<BsonDocument> filter)
+        public IEnumerable<BsonDocument> FindDocuments(string collection, KeyValuePair<string, Query.Filters> filter)
         {
             IEnumerable<BsonDocument> documents;
+            FilterDefinition<BsonDocument> queryFilter = null;
 
             try
             {
-                documents =  db.GetCollection<BsonDocument>(collection).Find(filter).ToCursor().ToEnumerable();
+                switch (filter)
+                {
+                    case Query.Filters.Equals:
+                        {
+                            queryFilter = Builders<BsonDocument>.Filter.Eq(filter.Key, filter.Value);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                documents = db.GetCollection<BsonDocument>(collection).Find(queryFilter).ToCursor().ToEnumerable();
             }
             catch
             {
@@ -191,7 +203,7 @@ namespace csharp_mongo_wrapper
                 throw;
             }
         }
- 
+
         /// <summary>
         /// Updates multiple documents that matche the filter with the received fields and their values
         /// </summary>
@@ -215,7 +227,7 @@ namespace csharp_mongo_wrapper
 
             return 0;
         }
- 
+
         /// <summary>
         /// Gets count of all documents in a collection
         /// </summary>
