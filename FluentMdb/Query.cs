@@ -1,4 +1,4 @@
-namespace csharp_mongo_wrapper
+namespace FluentMdb
 {
     static class Query
     {

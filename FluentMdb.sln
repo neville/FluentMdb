@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoWrapper", "MongoWrapper\MongoWrapper.csproj", "{52957A63-5A0C-4603-8858-98B13201CF6F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentMdb", "FluentMdb\FluentMdb.csproj", "{52957A63-5A0C-4603-8858-98B13201CF6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoWrapper.Tests", "MongoWrapper.Tests\MongoWrapper.Tests.csproj", "{79572A4D-570E-4E0B-B73C-C9955A555AC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentMdb.Tests", "FluentMdb.Tests\FluentMdb.Tests.csproj", "{79572A4D-570E-4E0B-B73C-C9955A555AC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

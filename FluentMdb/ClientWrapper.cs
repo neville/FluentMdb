@@ -2,9 +2,9 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
 
-namespace csharp_mongo_wrapper
+namespace FluentMdb
 {
-    class MongoWrapper
+    class ClientWrapper
     {
         // MongoDB driver reference documentation - https://mongodb.github.io/mongo-csharp-driver/
 
@@ -63,7 +63,7 @@ namespace csharp_mongo_wrapper
 
             try
             {
-                switch (filter)
+                switch (filter.Value)
                 {
                     case Query.Filters.Equals:
                         {
